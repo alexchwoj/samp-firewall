@@ -30,7 +30,15 @@ int main(int argc, char* argv[])
 
 #if defined INIT_RULES
 	system("iptables -F");
-	///system("iptables -A INPUT -p udp -j DROP");
+	for (int i = 0; i < sizeof rgiValidPorts; i++)
+	{
+		if (!rgiValidPorts[i]) continue;
+
+		char rule[80];
+		sprintf(rule, "iptables -A INPUT -p udp --dport %d -j DROP", rgiValidPorts[i]);
+		system(rule);
+	}
+	log_info("Default rules applied!");
 #endif
 
 	// Initialize cleaner interval
