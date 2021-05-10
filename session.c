@@ -3,7 +3,9 @@
 void clearSessionList()
 {
 	memset(aSessions, 0, sizeof aSessions);
+#if defined DEBUG_MODE
 	log_info("Session list cleaned");
+#endif
 }
 
 // Clear sessions list every 3 seconds
@@ -57,25 +59,25 @@ void registerQuery(char* address, uint query)
 
 		/*
 		* Magic key's:
-		* p (112), i (105), p (112), c (99), result: 33192
-		* i (105), p (112), c (99), r (114), result: 33194
+		* i (105), p (112), c (99), r (114), result: 430
 		*/
 
 		int magic_key = 0;
 		for (int i = 0; i < 4; i++)
 		{
-			printf("%c (%d), ", aSessions[index].aQueries[i], aSessions[index].aQueries[i]);
+			//printf("%c (%d), ", aSessions[index].aQueries[i], aSessions[index].aQueries[i]);
 			magic_key += aSessions[index].aQueries[i];
 		}
-		printf("result: %d\n", magic_key);
+		//printf("result: %d\n", magic_key);
 
 		if (magic_key == 428 || magic_key == 430)
 		{
 			char rule[80];
 			sprintf(rule, "iptables -I INPUT -s %s/32 -j ACCEPT", address);
 			system(rule);
-
+#if defined VALIDATED_MESSAGES
 			log_warn("Validated user: %s (magic_key: %d)", address, magic_key);
+#endif
 		}
 
 #if defined DEBUG_MODE
