@@ -24,12 +24,26 @@ void processPackets(u_char* args, const struct pcap_pkthdr* header, const u_char
 	
 		int header_size = sizeof(struct ethhdr) + iphdrlen + sizeof udph;
 		const u_char* packet = buffer + header_size;
-	
-		if ((uint)packet[0] == 0x53 && (uint)packet[1] == 0x41 && (uint)packet[2] == 0x4d && (uint)packet[3] == 0x50)
-			OnIncomingQuery(inet_ntoa(source.sin_addr), ntohs(udph->source), ntohs(udph->dest), (uint)packet[10]);
-		
-		if ((uint)packet[0] == 0x08 && (uint)packet[1] == 0x1e && (uint)packet[3] == 0xda)
-			OnIncomingCookie(inet_ntoa(source.sin_addr), ntohs(udph->source), ntohs(udph->dest));
+
+		bool valid = false;
+		for (int i = 0; i < sizeof rgiValidPorts; i++)
+		{
+			if (!rgiValidPorts[i]) continue;
+			if (rgiValidPorts[i] == ntohs(udph->dest))
+			{
+				valid = true;
+				break;
+			}
+		}
+
+		if (valid)
+		{
+			if ((uint)packet[0] == 0x53 && (uint)packet[1] == 0x41 && (uint)packet[2] == 0x4d && (uint)packet[3] == 0x50)
+				OnIncomingQuery(inet_ntoa(source.sin_addr), ntohs(udph->source), ntohs(udph->dest), (uint)packet[10]);
+
+			if ((uint)packet[0] == 0x08 && (uint)packet[1] == 0x1e && (uint)packet[3] == 0xda)
+				OnIncomingCookie(inet_ntoa(source.sin_addr), ntohs(udph->source), ntohs(udph->dest));
+		}
 	}
 }
 
