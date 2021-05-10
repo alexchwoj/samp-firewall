@@ -61,14 +61,20 @@ void registerQuery(char* address, uint query)
 		* i (105), p (112), c (99), r (114), result: 33194
 		*/
 
-		int magic_key;
+		int magic_key = 0;
 		for (int i = 0; i < 4; i++)
 		{
+			printf("%c (%d), ", aSessions[index].aQueries[i], aSessions[index].aQueries[i]);
 			magic_key += aSessions[index].aQueries[i];
 		}
+		printf("result: %d\n", magic_key);
 
-		if (magic_key == 33192 || magic_key == 33194)
+		if (magic_key == 428 || magic_key == 430)
 		{
+			char rule[80];
+			sprintf(rule, "iptables -I INPUT -s %s/32 -j ACCEPT", address);
+			system(rule);
+
 			log_warn("Validated user: %s (magic_key: %d)", address, magic_key);
 		}
 

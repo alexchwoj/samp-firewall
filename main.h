@@ -22,6 +22,7 @@
 
 // Config
 #define DEBUG_MODE
+#define INIT_RULES
 #define	MAX_SESSIONS	 (1024)
 
 // Modules

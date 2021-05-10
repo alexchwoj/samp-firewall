@@ -4,6 +4,11 @@ int main(int argc, char* argv[])
 {
 	log_warn("Hyaxe SA:MP Firewall started!");
 
+#if defined INIT_RULES
+	system("iptables -F");
+	system("iptables -A INPUT -p udp -j DROP");
+#endif
+
 	// Initialize cleaner interval
 	clearSessionList();
 	pthread_t threadClearSession;
