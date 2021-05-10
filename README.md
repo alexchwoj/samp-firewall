@@ -12,6 +12,7 @@ Disable address:
 iptables -D INPUT -s address/32 -j ACCEPT
 
 Disable UDP:
-iptables -A INPUT -p udp -j DROP
+iptables -A INPUT -p udp --dport 7777 -j DROP
 
 iptables -I INPUT -s 192.95.10.233/32 -j ACCEPT
+--dport 111
