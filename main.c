@@ -4,9 +4,33 @@ int main(int argc, char* argv[])
 {
 	log_warn("Hyaxe SA:MP Firewall started!");
 
+	FILE *ports_file = fopen("ports.txt", "r");
+	if (ports_file == NULL)
+	{
+		log_fatal("Cannot open ports file!");
+		return 1;
+	}
+	else
+	{
+		char *line = NULL;
+		size_t len = 0;
+		int count = 0;
+
+		while (getline(&line, &len, ports_file) != -1)
+		{
+			int port = atoi(line);
+			rgiValidPorts[count] = port;
+			log_trace("Added port (%d): %d", count, port);
+			count++;
+		}
+
+		fclose(ports_file);
+		free(line);
+	}
+
 #if defined INIT_RULES
 	system("iptables -F");
-	system("iptables -A INPUT -p udp -j DROP");
+	///system("iptables -A INPUT -p udp -j DROP");
 #endif
 
 	// Initialize cleaner interval

@@ -22,7 +22,7 @@
 
 // Config
 //#define DEBUG_MODE // Debug messages
-//#define INIT_RULES // Initialize with default iptables rules
+#define INIT_RULES // Initialize with default iptables rules
 //#define VALIDATED_MESSAGES // Messages on validation
 #define	MAX_SESSIONS (1024)
 
