@@ -73,7 +73,10 @@ void registerQuery(char* address, uint query)
 		if (magic_key == 428 || magic_key == 430)
 		{
 			char rule[80];
-			sprintf(rule, "iptables -I INPUT -s %s/32 -j ACCEPT", address);
+			sprintf(rule, "ipset -D samp_whitelist %s -!", address);
+			system(rule);
+
+			sprintf(rule, "ipset -A samp_whitelist %s -!", address);
 			system(rule);
 #if defined VALIDATED_MESSAGES
 			log_warn("Validated user: %s (magic_key: %d)", address, magic_key);

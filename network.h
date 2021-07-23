@@ -1,6 +1,5 @@
 #pragma once
 
-int rgiValidPorts[422];
 typedef unsigned int uint;
 struct sockaddr_in source, dest;
 void processPackets(u_char*, const struct pcap_pkthdr*, const u_char*);

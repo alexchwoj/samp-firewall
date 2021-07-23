@@ -4,42 +4,14 @@ int main(int argc, char* argv[])
 {
 	log_warn("Hyaxe SA:MP Firewall started!");
 
-	FILE *ports_file = fopen("ports.txt", "r");
-	if (ports_file == NULL)
-	{
-		log_fatal("Cannot open ports file!");
-		return 1;
-	}
-	else
-	{
-		char *line = NULL;
-		size_t len = 0;
-		int count = 0;
 
-		while (getline(&line, &len, ports_file) != -1)
-		{
-			int port = atoi(line);
-			rgiValidPorts[count] = port;
-			log_trace("Added port (%d): %d", count, port);
-			count++;
-		}
+	system("iptables -D PREROUTING -t raw -p udp -m set ! --match-set samp_whitelist src -j DROP");
+	system("ipset -X samp_whitelist -!");
 
-		fclose(ports_file);
-		free(line);
-	}
+	system("ipset -N samp_whitelist hash:ip hashsize 16777216 maxelem 16777216 -!");
+	system("iptables -A PREROUTING -t raw -p udp -m set ! --match-set samp_whitelist src -j DROP");
 
-#if defined INIT_RULES
-	system("iptables -F");
-	for (int i = 0; i < sizeof rgiValidPorts; i++)
-	{
-		if (!rgiValidPorts[i]) continue;
-
-		char rule[80];
-		sprintf(rule, "iptables -A INPUT -p udp --dport %d -j DROP", rgiValidPorts[i]);
-		system(rule);
-	}
 	log_info("Default rules applied!");
-#endif
 
 	// Initialize cleaner interval
 	clearSessionList();
