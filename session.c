@@ -59,7 +59,8 @@ void registerQuery(char* address, uint query)
 
 		/*
 		* Magic key's:
-		* i (105), p (112), c (99), r (114), result: 430
+		* PC: i (105), p (112), c (99), r (114), result: 430
+		* SAMP ANDROID: p (112), r (114), c (99), p (112), result: 437
 		*/
 
 		int magic_key = 0;
@@ -70,7 +71,7 @@ void registerQuery(char* address, uint query)
 		}
 		//printf("result: %d\n", magic_key);
 
-		if (magic_key == 428 || magic_key == 430)
+		if (magic_key == 428 || magic_key == 430 || magic_key == 437 || magic_key == 325)
 		{
 			char rule[80];
 			sprintf(rule, "ipset -D samp_whitelist %s -!", address);
