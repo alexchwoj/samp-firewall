@@ -4,11 +4,11 @@ int main(int argc, char* argv[])
 {
 	log_warn("Hyaxe SA:MP Firewall started!");
 
-	system("iptables -D PREROUTING -t raw -p udp -m u32 ! --u32 \"28=0x53414d50\" -m set ! --match-set samp_whitelist src -j DROP");
+	system("iptables -D PREROUTING -t raw -p udp -m multiport --dports 5000:60000 -m u32 ! --u32 \"28=0x53414d50\" -m set ! --match-set samp_whitelist src -j DROP");
 	system("ipset -X samp_whitelist -!");
 
 	system("ipset -N samp_whitelist hash:ip hashsize 16777216 maxelem 16777216 -!");
-	system("iptables -A PREROUTING -t raw -p udp -m u32 ! --u32 \"28=0x53414d50\" -m set ! --match-set samp_whitelist src -j DROP");
+	system("iptables -A PREROUTING -t raw -p udp -m multiport --dports 5000:60000 -m u32 ! --u32 \"28=0x53414d50\" -m set ! --match-set samp_whitelist src -j DROP");
 
 	log_info("Default rules applied!");
 
