@@ -22,8 +22,8 @@
 
 // Config
 //#define DEBUG_MODE // Debug messages
-#define VALIDATED_MESSAGES // Messages on validation
-#define	MAX_SESSIONS (1024)
+//#define VALIDATED_MESSAGES // Messages on validation
+#define	MAX_SESSIONS (4096)
 
 // Modules
 #define LOG_USE_COLOR
